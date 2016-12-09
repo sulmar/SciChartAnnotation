@@ -1,0 +1,72 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+                    xmlns:annotations="clr-namespace:SciChartAnnotation.Annotations">
+
+    <Style TargetType="annotations:ExHorizontalLineAnnotation">
+        <Setter Property="Stroke" Value="#FFFF6600" />
+        <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="ShowLabel" Value="True" />
+        <Setter Property="IsEditable" Value="True" />
+        <Setter Property="CanEditText" Value="True" />
+        <Setter Property="LabelPlacement" Value="Right" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="StrokeThickness" Value="3" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <DataTemplate x:Key="NumericXyTooltipTemplate" DataType="s:XySeriesInfo">
+        <TextBlock>
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}{0:0.#####} : {1:N2}">
+                    <Binding Path="XValue" />
+                    <Binding Path="YValue" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+    </DataTemplate>
+
+    <s:NumericAxis x:Key="NumericAxisX"
+                   AxisTitle="X"
+                   DrawMajorBands="True"
+                   VisibleRangeLimitMode="MinMax"
+                   TextFormatting="0.#####"
+                   />
+
+
+    <s:NumericAxis x:Key="NumericAxisY"
+                   GrowBy="0.1, 0.1"
+                   AxisTitle="Y"
+                   DrawMajorBands="True"
+                   TextFormatting="n2"
+                   />
+
+    <Style x:Key="LineStyle" TargetType="s:FastLineRenderableSeries">
+        <Setter Property="Stroke" Value="White" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="s:RolloverModifier.TooltipTemplate" Value="{StaticResource NumericXyTooltipTemplate}" />
+
+        <!--<Setter Property="SelectedSeriesStyle">
+            <Setter.Value>
+                <Style TargetType="s:FastLineRenderableSeries">
+                    <Setter Property="StrokeThickness" Value="3" />
+                    <Setter Property="PointMarkerTemplate">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <s:EllipsePointMarker Width="10"
+                                                      Height="10"
+                                                      StrokeThickness="3"
+                                                      Stroke="{Binding DataContext.Stroke, RelativeSource={RelativeSource TemplatedParent}}"
+                                                      Fill="Black" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>-->
+    </Style>
+    
+</ResourceDictionary>

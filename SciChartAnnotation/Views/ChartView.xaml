@@ -1,0 +1,78 @@
+﻿<Window x:Class="SciChartAnnotation.ChartView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SciChartAnnotation"
+        xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+        xmlns:vm="clr-namespace:SciChartAnnotation.ViewModels"
+        xmlns:a="clr-namespace:SciChartAnnotation.Annotations"
+        mc:Ignorable="d"
+        Title="ChartView" Height="350" Width="525">
+
+    <Window.DataContext>
+        <vm:ChartViewModel />
+    </Window.DataContext>
+    <Grid>
+
+        <DockPanel>
+
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" 
+                        HorizontalAlignment="Left">
+                <Button Width="100" Command="{Binding ClearAnnotationsCommand}">Clear annotations</Button>
+                <CheckBox x:Name="CanAddAnnotation" IsChecked="False" Content="Add" />
+            </StackPanel>
+        
+        <s:SciChartSurface Grid.Column="0" x:Name="sciChart"
+                                                   Annotations="{Binding Annotations}"
+                                                   ViewportManager="{Binding ViewportManager}"
+                                                   RenderableSeries="{s:SeriesBinding RenderableSeriesViewModels}"                                                   
+                                                    vm:Injector.PassSurfaceToViewModel="True"
+                                                   ClipModifierSurface="True">
+
+            <s:SciChartSurface.ChartModifier>
+                <s:ModifierGroup>
+                    <s:LegendModifier x:Name="legendModifier"
+                                                              ShowLegend="True"
+                                                              Margin="10"
+                                                              GetLegendDataFor="AllSeries"
+                                                              LegendPlacement="Bottom"
+                                                              ShowVisibilityCheckboxes="True"
+                                                              Orientation="Vertical"
+                                                              HorizontalAlignment="Stretch" />
+
+                    <s:ZoomPanModifier x:Name="zoomPanModifier"
+                                                               ReceiveHandledEvents="True"
+                                                               IsEnabled="True"
+                                                               XyDirection="XYDirection"
+                                                               ZoomExtentsY="False"
+                                                               ClipModeX="ClipAtExtents" />
+
+                    <s:ZoomExtentsModifier />
+                    <s:MouseWheelZoomModifier XyDirection="XDirection" />
+
+                        <s:RolloverModifier x:Name="RolloverModifier" DrawVerticalLine="True"
+                                                                ShowTooltipOn="MouseHover"
+                                                                SourceMode="AllVisibleSeries" />
+
+                        <s:SeriesSelectionModifier IsEnabled="True" ReceiveHandledEvents="True" />
+                    
+                        <s:AnnotationCreationModifier
+                                                AnnotationType="{x:Type a:ExHorizontalLineAnnotation}"
+                                                IsEnabled="{Binding ElementName=CanAddAnnotation, Path=IsChecked, Mode=OneWay}">
+                        </s:AnnotationCreationModifier>
+                    </s:ModifierGroup>
+            </s:SciChartSurface.ChartModifier>
+
+            <s:SciChartSurface.Style>
+                <Style TargetType="s:SciChartSurface">
+                    <Setter Property="XAxis" Value="{StaticResource NumericAxisX}" />
+                    <Setter Property="YAxis" Value="{StaticResource NumericAxisY}" />
+                </Style>
+            </s:SciChartSurface.Style>
+            
+        </s:SciChartSurface>
+
+        </DockPanel>
+    </Grid>
+</Window>
