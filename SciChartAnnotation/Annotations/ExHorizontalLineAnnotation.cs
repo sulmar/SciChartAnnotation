@@ -28,13 +28,17 @@ namespace SciChartAnnotation.Annotations
 
         protected override void OnAnnotationLoaded(object sender, RoutedEventArgs e)
         {
-            AnnotationLabels.Add(new AnnotationLabel
+
+            var annotationLabel = new AnnotationLabel
             {
                 LabelPlacement = LabelPlacement.Top,
                 CanEditText = true
-            });
+            };
+            CaptionBinding(annotationLabel);
+            AnnotationLabels.Add(annotationLabel);
+
             X1 = null;
-            CaptionBinding();
+            
             Y1Binding();
 
             pd.AddValueChanged(this, OnValueChanged);
@@ -48,14 +52,14 @@ namespace SciChartAnnotation.Annotations
             OnPropertyChanged(nameof(Y1));
         }
 
-        private void CaptionBinding()
+        private void CaptionBinding(AnnotationLabel annotationLabel)
         {
             var binding = new Binding(nameof(Caption))
             {
                 Source = this,
                 Mode = BindingMode.TwoWay
             };
-            AnnotationLabels[1].SetBinding(AnnotationLabel.TextProperty, binding);
+            annotationLabel.SetBinding(AnnotationLabel.TextProperty, binding);
         }
 
         private void Y1Binding()
